@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from ..config import PlotConfig
+from ..plotting import palette
 
 
 def plot_time_of_production_patterns(packs: pd.DataFrame, cfg: PlotConfig) -> plt.Figure:
@@ -29,9 +30,10 @@ def plot_time_of_production_patterns(packs: pd.DataFrame, cfg: PlotConfig) -> pl
         .loc[lines]
     )
     mix_pct = mix.div(mix.sum(axis=1).replace(0, 1), axis=0)
+    colors = palette(str(c) for c in mix_pct.columns)
     bottom = pd.Series([0.0] * len(lines), index=lines)
     for flv in mix_pct.columns:
-        ax1.bar(lines, mix_pct[flv], bottom=bottom, label=str(flv))
+        ax1.bar(lines, mix_pct[flv], bottom=bottom, label=str(flv), color=colors[str(flv)])
         bottom = bottom + mix_pct[flv]
     ax1.set_title("Time-of-Production Patterns (line/shift letter)")
     ax1.set_ylabel("Flavour mix (share)")

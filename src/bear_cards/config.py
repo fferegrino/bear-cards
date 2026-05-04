@@ -4,6 +4,13 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
+FLAVOUR_COLORS: dict[str, str] = {
+    "blackcurrant": "#492950",
+    "strawberry": "#9A1900",
+    "mango": "#FFBF34",
+}
+
+
 @dataclass(frozen=True)
 class PlotConfig:
     data_dir: Path = Path("data")

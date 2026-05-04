@@ -6,7 +6,7 @@ from typing import Iterable
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-from .config import PlotConfig
+from .config import FLAVOUR_COLORS, PlotConfig
 
 
 def setup_matplotlib(cfg: PlotConfig) -> None:
@@ -39,5 +39,8 @@ def save_fig(cfg: PlotConfig, fig: plt.Figure, filename: str) -> Path:
 def palette(values: Iterable[str]) -> dict[str, str]:
     vals = sorted({v for v in values if v is not None})
     cmap = plt.get_cmap("tab10")
-    return {v: mpl.colors.to_hex(cmap(i % 10)) for i, v in enumerate(vals)}
+    return {
+        v: FLAVOUR_COLORS.get(v, mpl.colors.to_hex(cmap(i % 10)))
+        for i, v in enumerate(vals)
+    }
 
