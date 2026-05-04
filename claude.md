@@ -7,11 +7,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This project uses [`uv`](https://docs.astral.sh/uv/) and Python 3.13.
 
 ```bash
-uv sync                              # install deps from uv.lock
-uv run python src/generate_plots.py  # regenerate every figure into plots/
+uv sync   # install deps from uv.lock
+make      # sort data/packs.csv, then regenerate every figure into plots/
 ```
 
-There is no test suite, linter, or formatter configured.
+`make` (default target `run`) chains `src/sort_packs.py` → `src/generate_plots.py`. Run either script directly with `uv run python src/<name>.py` to skip the other half. There is no test suite, linter, or formatter configured.
 
 ## Architecture
 
