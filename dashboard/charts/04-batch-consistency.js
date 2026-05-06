@@ -7,11 +7,11 @@ export default {
     height: 320,
     grid: true,
     color: { ...flavourScale, legend: true },
-    x: { label: "Batch prefix", tickRotate: -45 },
+    x: { label: "Batch prefix", tickRotate: -45, type: "band" },
     y: { label: "Card number" },
     marks: [
       Plot.dot(packs.filter(d => d.cardNumber != null), {
-        x: "batchPrefix",
+        x: d => +d.batchPrefix,
         y: "cardNumber",
         fill: "flavour",
         stroke: "white",

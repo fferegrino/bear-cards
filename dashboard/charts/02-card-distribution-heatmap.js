@@ -10,12 +10,12 @@ export default {
       d => d.flavour,
       d => d.cardNumber,
     ).flatMap(([flavour, byCard]) =>
-      byCard.map(([cardNumber, count]) => ({ flavour, cardNumber: String(cardNumber), count })),
+      byCard.map(([cardNumber, count]) => ({ flavour, cardNumber: +cardNumber, count })),
     );
     return Plot.plot({
       height: 220,
       marginLeft: 110,
-      x: { label: "Card number", tickRotate: -90 },
+      x: { label: "Card number", tickRotate: -90, type: "band" },
       y: { label: null },
       color: { scheme: "blues", legend: true, label: "Count" },
       marks: [
