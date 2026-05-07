@@ -4,6 +4,13 @@
   <meta charset="utf-8">
   <title>Bear Cards Dashboard</title>
   <link rel="stylesheet" href="dashboard/styles.css">
+  <style>
+    /* Force 2-up layout for plots; fall back to 1 column on small screens. */
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (max-width: 980px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
   <header>
