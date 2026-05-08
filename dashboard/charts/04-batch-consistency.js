@@ -3,7 +3,8 @@ import { Plot } from "../lib/deps.js";
 export default {
   title: "Batch consistency",
   desc: "Which cards turned up in each production batch (the YYDDD prefix).",
-  render: ({ packs, flavourScale }) => Plot.plot({
+  render: ({ packs, flavourScale, width }) => Plot.plot({
+    width,
     height: 320,
     grid: true,
     color: { ...flavourScale, legend: true },

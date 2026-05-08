@@ -25,15 +25,16 @@ const charts = [
   calendarHeatmap,
 ];
 
+const totalCardCount = 60;
 const packs = await loadPacks("data/packs.csv");
 assignRarity(packs);
 
 const { scale: flavourScale } = makeFlavourScale(packs);
 
-renderSummary(packs, document.getElementById("summary"));
+renderSummary(packs, totalCardCount, document.getElementById("summary"));
 
 const grid = document.getElementById("grid");
-const ctx = { packs, flavourScale };
+const ctx = { packs, flavourScale, totalCardCount };
 for (const chart of charts) {
   card(chart, ctx, grid);
 }

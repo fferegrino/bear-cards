@@ -3,7 +3,8 @@ import { Plot } from "../lib/deps.js";
 export default {
   title: "Production timeline vs discovery",
   desc: "Each pack plotted by its decoded production date and the card found inside.",
-  render: ({ packs, flavourScale }) => Plot.plot({
+  render: ({ packs, flavourScale, width }) => Plot.plot({
+    width,
     height: 320,
     marginLeft: 50,
     grid: true,

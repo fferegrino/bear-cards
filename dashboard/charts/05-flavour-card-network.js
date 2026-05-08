@@ -5,7 +5,7 @@ export default {
   title: "Flavour ↔ card network",
   desc: "Edge thickness reflects how often a flavour produced a given card.",
   wide: true,
-  render: ({ packs, flavourScale }) => {
+  render: ({ packs, flavourScale, width }) => {
     const flavList = [...new Set(packs.map(d => d.flavour))].sort();
     const cardList = [...new Set(packs.map(d => d.cardNumber).filter(c => c != null))]
       .sort(d3.ascending);
@@ -31,6 +31,7 @@ export default {
     const cardNodes = cardList.map(c => ({ cardNumber: c, side: 1, y: cy.get(c) }));
 
     return Plot.plot({
+      width,
       height: Math.max(280, 26 * cardList.length),
       marginLeft: 110,
       marginRight: 60,

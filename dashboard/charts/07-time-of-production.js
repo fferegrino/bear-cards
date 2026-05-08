@@ -3,8 +3,7 @@ import { Plot, d3 } from "../lib/deps.js";
 export default {
   title: "Time-of-production patterns (line / shift)",
   desc: "Top: flavour mix for each production line letter. Bottom: how many distinct cards appeared on each line.",
-  wide: true,
-  render: ({ packs, flavourScale }) => {
+  render: ({ packs, flavourScale, width }) => {
     const lines = [...new Set(packs.map(d => d.lineLetter))].filter(Boolean).sort();
     const mixData = d3.rollups(
       packs.filter(d => d.flavour && d.lineLetter),
@@ -26,6 +25,7 @@ export default {
     wrapper.style.display = "grid";
     wrapper.style.gap = "8px";
     wrapper.appendChild(Plot.plot({
+      width,
       height: 220,
       marginLeft: 60,
       x: { label: null, domain: lines },
@@ -42,6 +42,7 @@ export default {
       ],
     }));
     wrapper.appendChild(Plot.plot({
+      width,
       height: 200,
       marginLeft: 60,
       x: { label: "Line / shift letter", domain: lines },

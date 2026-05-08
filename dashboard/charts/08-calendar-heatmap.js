@@ -4,7 +4,7 @@ export default {
   title: "Calendar heatmap of production days",
   desc: "Cell color = packs collected from that production day. Number = pack count, decimal = avg rarity score (0 common, 2 rare). Showing the most-represented year.",
   wide: true,
-  render: ({ packs }) => {
+  render: ({ packs, width }) => {
     if (!packs.length) return document.createTextNode("No production date data.");
 
     const yearCounts = d3.rollup(packs, v => v.length, d => d.productionDate.getUTCFullYear());
@@ -42,41 +42,55 @@ export default {
 
     const maxCount = d3.max(days, d => d.count) || 1;
 
-    return Plot.plot({
-      height: 240,
-      marginLeft: 30,
-      marginTop: 30,
-      label: null,
-      x: { domain: dayLabels, axis: "top", tickSize: 0 },
-      y: { domain: [0, 1, 2, 3, 4, 5], axis: null },
-      fx: { domain: monthLabels, label: null, tickSize: 0 },
-      color: {
-        scheme: "ylorrd",
-        legend: true,
-        label: "Packs from that day",
-        domain: [0, maxCount],
-      },
-      marks: [
-        Plot.cell(days, {
-          x: "weekday", y: "week", fx: "month",
-          fill: "#f1ece2",
-          inset: 1,
-        }),
-        Plot.cell(days.filter(d => d.count > 0), {
-          x: "weekday", y: "week", fx: "month",
-          fill: "count",
-          inset: 1,
-          tip: true,
-          title: d => `${d3.utcFormat("%a %b %-d, %Y")(d.date)}\nPacks: ${d.count}${d.rarity != null ? `\nAvg rarity: ${d.rarity.toFixed(2)}` : ""}`,
-        }),
-        Plot.text(days.filter(d => d.count > 0), {
-          x: "weekday", y: "week", fx: "month",
-          text: d => d.rarity != null ? `${d.count}\n${d.rarity.toFixed(1)}` : `${d.count}`,
-          fill: "black",
-          fontSize: 8,
-          lineHeight: 1.05,
-        }),
-      ],
-    });
+    // Two stacked rows of 6 months each — keeps cells roughly square at full
+    // grid width instead of the squat 13px-wide × 35px-tall rectangles you
+    // get from cramming all 12 months into a single horizontal strip.
+    const renderHalf = (months, withLegend) => {
+      const subset = days.filter(d => months.includes(d.month));
+      return Plot.plot({
+        width,
+        height: 200,
+        marginLeft: 30,
+        marginTop: 30,
+        label: null,
+        x: { domain: dayLabels, axis: "top", tickSize: 0 },
+        y: { domain: [0, 1, 2, 3, 4, 5], axis: null },
+        fx: { domain: months, label: null, tickSize: 0 },
+        color: {
+          scheme: "ylorrd",
+          legend: withLegend,
+          label: "Packs from that day",
+          domain: [0, maxCount],
+        },
+        marks: [
+          Plot.cell(subset, {
+            x: "weekday", y: "week", fx: "month",
+            fill: "#f1ece2",
+            inset: 1,
+          }),
+          Plot.cell(subset.filter(d => d.count > 0), {
+            x: "weekday", y: "week", fx: "month",
+            fill: "count",
+            inset: 1,
+            tip: true,
+            title: d => `${d3.utcFormat("%a %b %-d, %Y")(d.date)}\nPacks: ${d.count}${d.rarity != null ? `\nAvg rarity: ${d.rarity.toFixed(2)}` : ""}`,
+          }),
+          Plot.text(subset.filter(d => d.count > 0), {
+            x: "weekday", y: "week", fx: "month",
+            text: d => d.rarity != null ? `${d.count}\n${d.rarity.toFixed(1)}` : `${d.count}`,
+            fill: "black",
+            fontSize: 9,
+            lineHeight: 1.05,
+          }),
+        ],
+      });
+    };
+
+    const wrapper = document.createElement("div");
+    wrapper.style.display = "grid";
+    wrapper.style.gap = "8px";
+    wrapper.appendChild(renderHalf(monthLabels.slice(0, 6), true));
+    wrapper.appendChild(renderHalf(monthLabels.slice(6, 12), false));
+    return wrapper;
   },
 };

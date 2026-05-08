@@ -3,7 +3,7 @@ import { Plot, d3 } from "../lib/deps.js";
 export default {
   title: "Rarity curve",
   desc: "Cards ranked from most common to rarest.",
-  render: ({ packs }) => {
+  render: ({ packs, width }) => {
     const ranked = d3.rollups(
       packs.filter(d => d.cardNumber != null),
       v => v.length,
@@ -16,6 +16,7 @@ export default {
     const min = d3.min(ranked, d => d.count) ?? 1;
     const useLog = max / Math.max(1, min) > 50;
     return Plot.plot({
+      width,
       height: 320,
       grid: true,
       x: { label: "Card rank (most common → rarest)" },

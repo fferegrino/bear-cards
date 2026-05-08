@@ -3,7 +3,7 @@ import { Plot, d3 } from "../lib/deps.js";
 export default {
   title: "Card distribution heatmap",
   desc: "How many times each card has appeared in each flavour.",
-  render: ({ packs }) => {
+  render: ({ packs, width }) => {
     const cells = d3.rollups(
       packs.filter(d => d.cardNumber != null),
       v => v.length,
@@ -13,6 +13,7 @@ export default {
       byCard.map(([cardNumber, count]) => ({ flavour, cardNumber: +cardNumber, count })),
     );
     return Plot.plot({
+      width,
       height: 220,
       marginLeft: 110,
       x: { label: "Card number", tickRotate: -90, type: "band" },

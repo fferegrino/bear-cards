@@ -3,7 +3,7 @@ import { Plot } from "../lib/deps.js";
 export default {
   title: "Duplicate tracker",
   desc: "Cumulative unique cards as packs are opened (the collector curve).",
-  render: ({ packs }) => {
+  render: ({ packs, width }) => {
     const seen = new Set();
     const series = [];
     for (const d of [...packs].sort((a, b) => a.packIndex - b.packIndex)) {
@@ -11,6 +11,7 @@ export default {
       series.push({ packIndex: d.packIndex, unique: seen.size });
     }
     return Plot.plot({
+      width,
       height: 320,
       grid: true,
       x: { label: "Packs opened" },
